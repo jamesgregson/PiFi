@@ -16,7 +16,11 @@ echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" > conf/wpa_suppli
 echo "update_config=1" >> conf/wpa_supplicant_dhcp.conf
 echo "network={" >> conf/wpa_supplicant_dhcp.conf
 echo "  ssid=\"$1\"" >> conf/wpa_supplicant_dhcp.conf
-echo "  psk=\"$2\"" >> conf/wpa_supplicant_dhcp.conf
+
+# new stuff to use encrypted passphrase...
+TMP=`wpa_passphrase $1 $2 | grep '[[:space:]]\psk=.*'`
+echo "$TMP" >> conf/wpa_supplicant_dhcp.conf
+
 echo "}" >> conf/wpa_supplicant_dhcp.conf
 cp conf/wpa_supplicant_dhcp.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
